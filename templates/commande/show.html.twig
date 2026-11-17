@@ -1,0 +1,86 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Commande n° {{ commande.numero }}{% endblock %}
+
+{% block body %}
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        
+        <!-- En-tête et retour -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <a href="{{ path('app_commande') }}" class="text-decoration-none text-muted small fw-medium mb-1 d-inline-block">
+                    ← Retour aux commandes
+                </a>
+                <h1 class="h3 fw-bold mb-0 text-dark">Commande n° {{ commande.numero }}</h1>
+            </div>
+            <div class="d-flex gap-2">
+                <a href="{{ path('commande_edit', {'id': commande.id}) }}" class="btn btn-outline-primary btn-sm px-3">
+                    ✏️ Modifier
+                </a>
+                <form method="post" action="{{ path('commande_delete', {'id': commande.id}) }}" class="d-inline" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette commande ?')">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ commande.id) }}">
+                    <button type="submit" class="btn btn-outline-danger btn-sm px-3">🗑️ Supprimer</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="card border-0 shadow-sm rounded-4 p-4 mb-4 bg-white">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <span class="text-muted small d-block mb-1 text-uppercase fw-semibold" style="font-size: 0.75rem;">Date</span>
+                    <span class="fw-semibold text-dark fs-6">{{ commande.date|date('d/m/Y') }}</span>
+                </div>
+                <div class="col-md-4">
+                    <span class="text-muted small d-block mb-1 text-uppercase fw-semibold" style="font-size: 0.75rem;">Statut</span>
+                    <span class="badge bg-secondary-subtle text-secondary border px-2 py-1">{{ commande.statut }}</span>
+                </div>
+                <div class="col-md-4">
+                    <span class="text-muted small d-block mb-1 text-uppercase fw-semibold" style="font-size: 0.75rem;">Client</span>
+                    <span class="fw-semibold text-dark fs-6">{{ commande.client.prenom }} {{ commande.client.nom }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Carte du tableau des produits -->
+        <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+            <h3 class="h5 fw-bold mb-3 text-dark">Produits commandés</h3>
+            
+            <div class="table-responsive">
+                <table class="table align-middle table-hover mb-0">
+                    <thead class="table-light text-uppercase fs-7" style="font-size: 0.75rem;">
+                        <tr>
+                            <th class="py-3 rounded-start">Produit</th>
+                            <th class="py-3">Prix unitaire</th>
+                            <th class="py-3">Quantité</th>
+                            <th class="py-3 rounded-end text-end">Montant</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for ligne in commande.ligneCommandes %}
+                            <tr>
+                                <td class="fw-semibold text-dark">{{ ligne.produit.nom }}</td>
+                                <td class="text-muted">{{ ligne.prixUnitaire }} €</td>
+                                <td><span class="badge bg-light text-dark border">{{ ligne.quantite }}</span></td>
+                                <td class="text-end fw-bold text-dark">{{ ligne.montant }} €</td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="4" class="text-center text-muted py-4">Aucun produit dans cette commande.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="d-flex justify-content-end align-items-center mt-4 pt-3 border-top">
+                <div class="text-end">
+                    <span class="text-muted me-3 fs-6">Total général :</span>
+                    <span class="fs-4 fw-bold text-primary">{{ commande.total }} €</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

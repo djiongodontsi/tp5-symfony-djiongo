@@ -1,0 +1,74 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Client : {{ client.prenom }} {{ client.nom }}{% endblock %}
+
+{% block body %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        
+        <!-- En-tête et actions de navigation -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <a href="{{ path('app_client') }}" class="text-decoration-none text-muted small fw-medium mb-1 d-inline-block">
+                    ← Retour à la liste
+                </a>
+                <h1 class="h3 fw-bold mb-0 text-dark">Détails du client</h1>
+            </div>
+            <div class="d-flex gap-2">
+                <a href="{{ path('client_edit', {'id': client.id}) }}" class="btn btn-outline-primary btn-sm px-3">
+                    ✏️ Modifier
+                </a>
+                <form method="post" action="{{ path('client_delete', {'id': client.id}) }}" class="d-inline" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce client ?')">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ client.id) }}">
+                    <button type="submit" class="btn btn-outline-danger btn-sm px-3">🗑️ Supprimer</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5 bg-white">
+            
+            <div class="d-flex align-items-center mb-4 pb-4 border-bottom">
+                <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center fw-bold fs-4 shadow-sm" style="width: 64px; height: 64px;">
+                    {{ client.prenom|slice(0, 1)|upper }}{{ client.nom|slice(0, 1)|upper }}
+                </div>
+                <div class="ms-3">
+                    <h2 class="h4 fw-bold mb-1 text-dark">{{ client.prenom }} {{ client.nom }}</h2>
+                    <span class="badge bg-light text-secondary border">ID #{{ client.id }}</span>
+                </div>
+            </div>
+
+            <div class="row g-3">
+                <div class="col-sm-6">
+                    <div class="p-3 bg-light rounded-3 border-0">
+                        <span class="text-muted small d-block mb-1 text-uppercase fw-semibold" style="font-size: 0.75rem;">Nom</span>
+                        <span class="fw-semibold text-dark fs-6">{{ client.nom }}</span>
+                    </div>
+                </div>
+                
+                <div class="col-sm-6">
+                    <div class="p-3 bg-light rounded-3 border-0">
+                        <span class="text-muted small d-block mb-1 text-uppercase fw-semibold" style="font-size: 0.75rem;">Prénom</span>
+                        <span class="fw-semibold text-dark fs-6">{{ client.prenom }}</span>
+                    </div>
+                </div>
+                
+                <div class="col-sm-6">
+                    <div class="p-3 bg-light rounded-3 border-0">
+                        <span class="text-muted small d-block mb-1 text-uppercase fw-semibold" style="font-size: 0.75rem;">Email</span>
+                        <span class="fw-semibold text-dark fs-6">{{ client.email|default('Non renseigné') }}</span>
+                    </div>
+                </div>
+                
+                <div class="col-sm-6">
+                    <div class="p-3 bg-light rounded-3 border-0">
+                        <span class="text-muted small d-block mb-1 text-uppercase fw-semibold" style="font-size: 0.75rem;">Téléphone</span>
+                        <span class="fw-semibold text-dark fs-6">{{ client.telephone|default('Non renseigné') }}</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+{% endblock %}

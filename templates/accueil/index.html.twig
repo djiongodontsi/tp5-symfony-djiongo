@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil - Application Gestion{% endblock %}
+
+{% block body %}
+    <h1>Bienvenue sur l'application de gestion</h1>
+    <p>Sélectionnez une rubrique dans le menu ci-dessus ou cliquez sur un des accès rapides ci-dessous :</p>
+
+    <ul>
+        <li><a href="{{ path('app_client') }}"> Mes Clients</a></li>
+        <li><a href="{{ path('app_produit_index') }}">Mes Produits</a></li>
+        <li><a href="{{ path('app_commande') }}">Mes Commandes</a></li>
+    </ul>
+{% endblock %}
